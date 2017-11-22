@@ -1,0 +1,37 @@
+{
+  "name": "weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "dependencies": {
+    "node-sass": "^4.7.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^14.5.0",
+    "eslint": "^4.11.0",
+    "node-sass": "^4.7.2",
+    "uglifyjs": "^2.4.11"
+  },
+  "scripts": {
+    "start": "npm run-all --parallel watch:*",
+    "build:html": "cp src/index.html dist/",
+    "prebuild:js": "eslint src/js",
+    "build:js": "browserify src/js/app.js -t babelify -o dist/js/app.js",
+    "postbuild:js": "uglifyjs dist/js/*.js -m",
+    "build:css": "node-sass --output-style nested --indent-type tab --indent-width 4 src/styles/*.scss -o dist/styles",
+    "postbuild:css": "postcss -u autoprefixer -r dist/styles/*",
+    "build:all": "npm run build:css && npm run build:js",
+    "watch:js": "watchify 'src/js/app.js' -- npm run build:js",
+    "watch:css": "onchange 'src/styles/*.scss' -- npm run build:css",
+    "watch:html": "onchange 'src/index.html' -- npm run build:html",
+    "watch:all": "parallelshell 'npm run serve' 'npm run watch:css' 'npm run watch:js'",
+    "serve": "browser-sync start --server --files 'dist/styles/*.css, dist/js/*.js, dist/index.html'",
+    "test": "hello"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
